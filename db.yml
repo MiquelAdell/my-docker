@@ -1,4 +1,0 @@
-db:
-    image: mysql
-    environment:
-    - MYSQL_ROOT_PASSWORD=EPex62LGtwMAgkf2

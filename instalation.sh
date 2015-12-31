@@ -2,21 +2,23 @@
 # if not shared share SSH keys
 # https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2
 
-#Edit /etc/ssh/sshd_config
+nano /etc/ssh/sshd_config
+# check that this values are as this:
 Port 1983
 PasswordAuthentication no
 ChallengeResponseAuthentication no
-
+PubkeyAuthentication yes
+AuthorizedKeysFile      %h/.ssh/authorized_keys
 service ssh restart
 
 ### LOCALE ###
-#add  LC_ALL="en_US.UTF-8" to /etc/environment
+nano /etc/environment
+#add  LC_ALL="en_US.UTF-8"
 
 ### USUARIO ###
 useradd miqueladell
 mkdir /home/miqueladell/
-chown miqueladell /home/miqueladell/
-chgrp miqueladell /home/miqueladell/
+chown miqueladell:miqueladell /home/miqueladell/
 passwd miqueladell
 # enter password ## search for a way to do that without user interaction
 sudo adduser miqueladell sudo
@@ -49,18 +51,18 @@ User miqueladell
 ### UPDATE & INSTALL BASICS ###
 sudo apt-get update
 sudo apt-get -y upgrade
-sudo apt-get -y install zsh nano wget dialog net-tools w3m w3m-img
+sudo apt-get -y install zsh nano wget dialog net-tools w3m w3m-img git
 
 #zsh
 sudo sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 sudo chsh -s $(which zsh)
 sudo nano /etc/passwd
 #add /bin/zsh to the last line -->
-username:x:1634231:100:Your Name:/home/username:/bin/zsh
+#username:x:1634231:100:Your Name:/home/username:/bin/zsh
 
 ### to run docker as miqueladell
 sudo groupadd docker
-sudo gpasswd -a ${USER} docker
+sudo gpasswd -a miqueladell docker
 sudo service docker restart
 
 # docker-compose https://docs.docker.com/compose/install/
@@ -70,16 +72,9 @@ exit
 sudo chmod +x /usr/local/bin/docker-compose
 
 
-### nginx at docker
-docker run --name nginx-container -p 80:80 -d nginx
-
-
-sudo rm -v /etc/nginx/nginx.conf
-sudo nano /etc/nginx/nginx.conf
-### -> https://gist.github.com/MiquelAdell/0a7725c2b48ae7d9e473
-service nginx start
-
-
+#####################
+### CODE EXAMPLES ###
+#####################
 #ssh copy
 scp docker-compose.yml docker-01:~/insonorizate
 
